@@ -1,0 +1,35 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="reservation">
+            <h2><span jhiTranslate="starter03App.reservation.detail.title">Reservation</span> {{reservation.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="starter03App.reservation.from">From</span></dt>
+                <dd>
+                    <span>{{reservation.from}}</span>
+                </dd>
+                <dt><span jhiTranslate="starter03App.reservation.untill">Untill</span></dt>
+                <dd>
+                    <span>{{reservation.untill}}</span>
+                </dd>
+                <dt><span jhiTranslate="starter03App.reservation.user">User</span></dt>
+                <dd>
+                    {{reservation.user?.login}}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/reservation', reservation.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

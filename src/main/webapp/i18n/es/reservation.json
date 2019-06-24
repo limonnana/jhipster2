@@ -1,0 +1,24 @@
+{
+  "starter03App": {
+    "reservation": {
+      "home": {
+        "title": "Reservations",
+        "createLabel": "Crear nuevo Reservation",
+        "createOrEditLabel": "Crear o editar Reservation",
+        "notFound": "No Reservation found"
+      },
+      "created": "Un nuevo Reservation ha sido creado con el identificador {{ param }}",
+      "updated": "Un Reservation ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Reservation ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Reservation {{ id }}?"
+      },
+      "detail": {
+        "title": "Reservation"
+      },
+      "from": "From",
+      "untill": "Untill",
+      "user": "User"
+    }
+  }
+}

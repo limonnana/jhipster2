@@ -1,0 +1,54 @@
+<style>
+.rTable {
+    display: block;
+    width: 100%;
+}
+.rTableRow {
+    display: table-row;
+}
+.rTableCell { 
+    display: table-cell; 
+    padding: 3px 10px;
+    border: 1px solid #d3d3d6;
+    background-color: rgb(184, 235, 241);
+}
+.rTableCell.plus { 
+   
+    background-color: rgb(250, 200, 233);
+}
+.rTableCell.plus a {
+    color: red;
+}
+.rTableCell.minus { 
+    background-color: rgb(185, 248, 177);
+}
+.rTableBody {
+    display: table-row-group;
+}
+</style>
+<div>
+  <h3 id="page-heading">
+      <span jhiTranslate="month.home.title">{{month.name}}</span>
+  </h3>
+  <table style="border: 1px solid #d3d3d6;">
+      <tbody>
+        <tr *ngFor="let x of month.m | keyvalue" style="border: 1px solid #d3d3d6;">
+           <td>&nbsp; {{x.key}} &nbsp;</td>
+           <td>
+             <div class="rTable">
+                <div class="rTableRow">
+                    <div class="rTableCell" *ngFor="let data of x.value">
+                   {{data.userId}}
+                    </div>
+                    <div class="rTableCell plus"> <a href="#">+ </a></div>
+                    <div class="rTableCell minus"> - </div>
+                </div>
+             </div>
+            
+            
+            </td>
+        </tr>
+       </tbody>
+      </table>
+   
+</div>
