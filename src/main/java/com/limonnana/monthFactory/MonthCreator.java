@@ -5,6 +5,7 @@ import com.limonnana.domain.MonthList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,38 @@ public class MonthCreator {
 
 
     }
+
+    public MonthListDTO getMockTestListReservationsNext(LocalDateTime day){
+
+        MonthList monthList = monthUtils.getMonthList(day);
+        monthList.setId(1L);
+        monthUtils.createEmptyList(monthList);
+        MonthListDTO mDTO = monthUtils.toMonthListDTO(monthList);
+        Map m =  mDTO.getM();
+
+        UnitOfCalendar u = new UnitOfCalendarI();
+
+        m.forEach((key, value) -> {
+            Integer keyMap = (Integer) key;
+
+            for(int i=0;i<HOW_MANY_RESERVATIONS_PER_DAY_ARE_ALLOWED;i++){
+                int randomNum = ThreadLocalRandom.current().nextInt(MIN, MAX + 1);
+                if((i % randomNum) == 0){
+                    UnitOfCalendar unit = new UnitOfCalendarI();
+                    List<UnitOfCalendar> uc = (List<UnitOfCalendar>)value;
+                    // List<UnitOfCalendar> l = new ArrayList<>();
+
+                    unit.setUserId("|" + i + "|");
+                    uc.add(unit);
+                    m.put(key, uc);
+                }
+            }
+            //      System.out.println("Key : " + key + " Value : " + (UnitOfCalendar)value);
+        });
+
+        return mDTO;
+    }
+
 
     public MonthListDTO getMockTestListReservations(){
 

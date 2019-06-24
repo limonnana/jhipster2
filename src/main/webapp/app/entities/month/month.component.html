@@ -27,8 +27,9 @@
 }
 </style>
 <div>
+        {{month.year}}
   <h3 id="page-heading">
-      <span jhiTranslate="month.home.title">{{month.name}}</span>
+      <span jhiTranslate="month.home.title">{{month.name}}</span> 
   </h3>
   <table style="border: 1px solid #d3d3d6;">
       <tbody>
@@ -40,7 +41,7 @@
                     <div class="rTableCell" *ngFor="let data of x.value">
                    {{data.userId}}
                     </div>
-                    <div class="rTableCell plus"> <a href="#">+ </a></div>
+                    <div class="rTableCell plus"> <a href="{{x.key}}">+ </a></div>
                     <div class="rTableCell minus"> - </div>
                 </div>
              </div>
@@ -50,5 +51,8 @@
         </tr>
        </tbody>
       </table>
+
+      <img [src]="imagePathNext" (click)="nextMonth()" style="width:4%;margin-top: 4%;margin-left: 5%">
+      
    
 </div>

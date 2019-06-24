@@ -10,11 +10,15 @@ type EntityResponseType = HttpResponse<IMonth>;
   providedIn: 'root'
 })
 export class MonthService {
-  public resourceUrl = SERVER_API_URL + 'api/month';
+  public resourceUrl = SERVER_API_URL + 'api';
 
   constructor(protected http: HttpClient) {}
 
   getCurrentMonth(): Observable<EntityResponseType> {
-    return this.http.get<IMonth>(`${this.resourceUrl}`, { observe: 'response' });
+    return this.http.get<IMonth>(`${this.resourceUrl}/month`, { observe: 'response' });
+  }
+
+  getNextMonth(currentMonth: string, currentYear: number): Observable<EntityResponseType> {
+    return this.http.get<IMonth>(`${this.resourceUrl}/nextMonth/${currentMonth}/${currentYear}`, { observe: 'response' });
   }
 }

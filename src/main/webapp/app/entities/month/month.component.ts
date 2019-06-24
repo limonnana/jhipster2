@@ -12,11 +12,13 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 })
 export class MonthComponent implements OnInit {
   month: IMonth;
+  imagePathNext: string;
 
   constructor(private monthService: MonthService, protected jhiAlertService: JhiAlertService) {}
 
   ngOnInit() {
     this.getCurrentMonth();
+    this.imagePathNext = '../../content/images/next1.png';
   }
 
   getCurrentMonth() {
@@ -33,6 +35,23 @@ export class MonthComponent implements OnInit {
           // data => {
           //    this.userList = data;
           // });
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  nextMonth() {
+    this.monthService
+      .getNextMonth(this.month.name, this.month.year)
+      .pipe(
+        filter((res: HttpResponse<IMonth>) => res.ok),
+        map((res: HttpResponse<IMonth>) => res.body)
+      )
+      .subscribe(
+        (res: IMonth) => {
+          this.month = null;
+          this.month = res;
+          console.log('result: ' + this.month.name);
         },
         (res: HttpErrorResponse) => this.onError(res.message)
       );
