@@ -12,6 +12,10 @@
     border: 1px solid #d3d3d6;
     background-color: rgb(184, 235, 241);
 }
+.rTableCell.index { 
+   
+   background-color: white;
+}
 .rTableCell.plus { 
    
     background-color: rgb(250, 200, 233);
@@ -32,24 +36,24 @@
       <span jhiTranslate="month.home.title">{{month.name}}</span> 
   </h3>
   <table style="border: 1px solid #d3d3d6;">
-      <tbody>
-        <tr *ngFor="let x of month.m | keyvalue" style="border: 1px solid #d3d3d6;">
-           <td>&nbsp; {{x.key}} &nbsp;</td>
-           <td>
-             <div class="rTable">
-                <div class="rTableRow">
-                    <div class="rTableCell" *ngFor="let data of x.value">
-                   {{data.userId}}
-                    </div>
-                    <div class="rTableCell plus"> <a href="{{x.key}}">+ </a></div>
-                    <div class="rTableCell minus"> - </div>
-                </div>
-             </div>
-            
-            
-            </td>
-        </tr>
-       </tbody>
+        <tbody>
+                <tr *ngFor="let x of month.m | keyvalue:calculateCustomComparator" style="border: 1px solid #d3d3d6;">
+                   <td>&nbsp; {{x.key}} &nbsp;</td>
+                   <td>
+                     <div class="rTable">
+                        <div class="rTableRow">
+                            <div class="rTableCell" *ngFor="let data of x.value">
+                           {{data.userId}}
+                            </div>
+                            <div class="rTableCell plus"> <a href="/{{x.key}}">+ </a></div>
+                            <div class="rTableCell minus"> - </div>
+                        </div>
+                     </div>
+                    
+                    
+                    </td>
+                </tr>
+               </tbody>
       </table>
 
       <img [src]="imagePathNext" (click)="nextMonth()" style="width:4%;margin-top: 4%;margin-left: 5%">

@@ -62,10 +62,12 @@ public class MonthUtils {
 
         MonthList monthList = new MonthList();
         LocalDateTime now = day;
+        LocalDate theTime = day.toLocalDate();
         int year = now.getYear();
         monthList.setName(now.getMonth());
         monthList.setFrom(1);
-        monthList.setUntill(LocalDate.now().lengthOfMonth());
+        monthList.setUntill(theTime.lengthOfMonth());
+
         monthList.setYear(year);
 
         return monthList;
