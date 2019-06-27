@@ -1,4 +1,5 @@
 import { UnitOfCalendar } from './unit.of.calendar.model';
+import { MonthMapKey } from './month.map.key.model';
 
 export interface IMonth {
   id?: number;
@@ -6,7 +7,7 @@ export interface IMonth {
   from?: number;
   untill?: number;
   year?: number;
-  m?: Map<number, UnitOfCalendar>;
+  m?: Map<MonthMapKey, UnitOfCalendar>;
 }
 
 export class Month implements IMonth {
@@ -16,6 +17,6 @@ export class Month implements IMonth {
     public from?: number,
     public untill?: number,
     public year?: number,
-    public m?: Map<number, UnitOfCalendar>
+    public m?: Map<MonthMapKey, UnitOfCalendar>
   ) {}
 }

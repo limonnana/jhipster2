@@ -12,7 +12,7 @@ public class MonthListDTO {
     private int year;
     private int from;
     private int untill;
-    private Map<Integer, List<EntityOnCalendar>> m = new TreeMap<>();
+    private Map<MonthListDTOMapKey, List<UnitOfCalendar>> m = new TreeMap<>();
 
     public Long getId() {
         return id;
@@ -54,11 +54,12 @@ public class MonthListDTO {
         this.untill = untill;
     }
 
-    public Map<Integer, List<EntityOnCalendar>> getM() {
+
+    public Map<MonthListDTOMapKey, List<UnitOfCalendar>> getM() {
         return m;
     }
 
-    public void setM(Map<Integer, List<EntityOnCalendar>> m) {
+    public void setM(Map<MonthListDTOMapKey, List<UnitOfCalendar>> m) {
         this.m = m;
     }
 }

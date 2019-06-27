@@ -6,6 +6,7 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { UnitOfCalendar } from './unit.of.calendar.model';
 import { KeyValue } from '@angular/common';
+import { MonthMapKey } from './month.map.key.model';
 
 @Component({
   selector: 'jhi-month',
@@ -23,7 +24,14 @@ export class MonthComponent implements OnInit {
     this.imagePathNext = '../../content/images/next1.png';
   }
 
-  calculateCustomComparator(a: KeyValue<number, (UnitOfCalendar)[]>, b: KeyValue<number, (UnitOfCalendar)[]>): number {
+  calculateCustomComparator(a: KeyValue<MonthMapKey, (UnitOfCalendar)[]>, b: KeyValue<MonthMapKey, (UnitOfCalendar)[]>): number {
+    const key1: number = +a.key.dayNumber;
+    const key2: number = +b.key.dayNumber;
+    const result = key1 > key2 ? 1 : key2 > key1 ? -1 : 0;
+    return result;
+  }
+
+  makeOrder(a: KeyValue<number, (any)[]>, b: KeyValue<number, (UnitOfCalendar)[]>): number {
     const key1: number = +a.key;
     const key2: number = +b.key;
     const result = key1 > key2 ? 1 : key2 > key1 ? -1 : 0;
@@ -39,6 +47,7 @@ export class MonthComponent implements OnInit {
       )
       .subscribe(
         (res: IMonth) => {
+          // this.month = null;
           this.month = res;
           console.log('result: ' + this.month.name);
         },
@@ -55,7 +64,7 @@ export class MonthComponent implements OnInit {
       )
       .subscribe(
         (res: IMonth) => {
-          this.month = null;
+          // this.month = null;
           this.month = res;
           console.log('result: ' + this.month.name);
         },

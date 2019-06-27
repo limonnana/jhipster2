@@ -2,6 +2,7 @@ package com.limonnana.web.rest;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.limonnana.domain.MonthArrayOrder;
 import com.limonnana.domain.MonthList;
 import com.limonnana.domain.MonthListDTO;
@@ -23,10 +24,13 @@ import java.util.List;
 public class MonthController {
 
     @Autowired
-   MonthCreator monthCreator;
+   private MonthCreator monthCreator;
 
     @Autowired
-    MonthUtils monthUtils;
+    private MonthUtils monthUtils;
+
+    protected Gson gson;
+
 
 
     @GetMapping("/month")
@@ -34,7 +38,7 @@ public class MonthController {
 
         MonthListDTO mDTO = monthCreator.getMockTestListReservations();
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
         String result = gson.toJson(mDTO);
 
@@ -45,22 +49,12 @@ public class MonthController {
     ResponseEntity<String>  getNextMonths(@PathVariable String month, @PathVariable int year){
 
         Month m = Month.valueOf(month);
-        int monthInt = m.getValue();
-        LocalDateTime ld = LocalDateTime.of(year,m, 1, 1, 1);
+        LocalDateTime ld = monthUtils.getLocalDateTime(m, year, 1);
         LocalDateTime nextMonth = ld.plusMonths(1);
 
         MonthListDTO mDTO = monthCreator.getMockTestListReservationsNext(nextMonth);
 
-
-       // if(month.equals(Month.DECEMBER.toString())) {
-       //     mDTO.setYear(year);
-       // }
-
-
-       // mDTO.setName(nextMonth.getMonth());
-
-        Gson gson = new Gson();
-
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
         String result = gson.toJson(mDTO);
 
         return ResponseEntity.ok().body(result);

@@ -15,8 +15,8 @@ public class ListWrapper {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @OneToMany(targetEntity=EntityOnCalendar.class, fetch=FetchType.EAGER)
-    private List<EntityOnCalendar> list;
+    @OneToMany(fetch=FetchType.EAGER)
+    private List<UnitOfCalendar> list;
 
     public Long getId() {
         return id;
@@ -26,11 +26,12 @@ public class ListWrapper {
         this.id = id;
     }
 
-    public List<EntityOnCalendar> getList() {
+
+    public List<UnitOfCalendar> getList() {
         return list;
     }
 
-    public void setList(List<EntityOnCalendar> list) {
+    public void setList(List<UnitOfCalendar> list) {
         this.list = list;
     }
 }

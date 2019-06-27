@@ -14,6 +14,7 @@ import java.util.Map;
 @Component
 public class MonthUtils {
 
+    /*
     EntityOnCalendar saveEntity(int from, int untill, int year, int eFrom, int eUntill, Month name, long userId){
 
         //get calendar from database, (if == null)
@@ -43,6 +44,8 @@ public class MonthUtils {
 
         return e;
     }
+
+     */
 
     public MonthList getCurrentMonth() {
         MonthList month = new MonthList();
@@ -75,7 +78,7 @@ public class MonthUtils {
 
     public void createEmptyList(MonthList monthList) {
         for (int i = monthList.getFrom(); i <= monthList.getUntill(); i++) {
-            List<EntityOnCalendar> unitsList = new ArrayList<>();
+            List<UnitOfCalendar> unitsList = new ArrayList<>();
             ListWrapper lw = new ListWrapper();
             lw.setList(unitsList);
             monthList.getM().put(i, lw);
@@ -109,6 +112,11 @@ public class MonthUtils {
         return firstDayNextMonth.plusMonths(howManyMonthForward);
     }
 
+    public LocalDateTime getLocalDateTime(Month m, int year, int day){
+        LocalDateTime ld = LocalDateTime.of(year,m, day, 1, 1);
+        return ld;
+    }
+
     public LocalDateTime getNextMonth(){
         LocalDateTime now = LocalDateTime.now();
         int day = now.getDayOfMonth();
@@ -125,14 +133,20 @@ public class MonthUtils {
         mDTO.setUntill(monthList.getUntill());
         mDTO.setName(monthList.getName());
         mDTO.setYear((monthList.getYear()));
-        //  Map<Integer, List<EntityOnCalendar>> map = new TreeMap<>();
         Map<Integer, ListWrapper> m = monthList.getM();
 
-        m.forEach((key, value) -> {
-            Integer keyMap = (Integer) key;
-            ListWrapper ls = (ListWrapper) value;
-            mDTO.getM().put(key, ls.getList());
-        });
+        LocalDateTime ld = getLocalDateTime(monthList.getName(),monthList.getYear(),monthList.getFrom());
+
+        for (Map.Entry<Integer, ListWrapper> entry : m.entrySet()) {
+
+            Integer keyMap =  entry.getKey();
+            ListWrapper ls = entry.getValue();
+            MonthListDTOMapKey mapKey = new MonthListDTOMapKey();
+            mapKey.setDayNumber(keyMap);
+            mapKey.setDayName(ld.getDayOfWeek().toString().toLowerCase());
+            mDTO.getM().put(mapKey, ls.getList());
+            ld = ld.plusDays(1);
+        };
 
         return mDTO;
     }
