@@ -20,17 +20,16 @@ export class MapCompositeKeyPipe implements PipeTransform {
   constructor() {}
 
   transform(value: any[][]): Array<KeyValue<MonthMapKey, UnitOfCalendar[]>> {
-    let keyValues: Array<KeyValue<any, any>> = [];
+    const keyValues: Array<KeyValue<any, any>> = [];
 
-    let key = Object.keys(value);
+    const key = Object.keys(value);
     for (let i = 0; i < key.length; i++) {
-      let monthMapKey = value[i][0];
-      let theList = value[i][1];
-      let keyValue = makeKeyValuePair(monthMapKey, theList);
+      const monthMapKey = value[i][0];
+      const theList = value[i][1];
+      const keyValue = makeKeyValuePair(monthMapKey, theList);
 
       keyValues.push(keyValue);
     }
-
     return keyValues;
   }
 }

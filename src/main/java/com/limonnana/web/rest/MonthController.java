@@ -45,12 +45,15 @@ public class MonthController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/nextMonth/{month}/{year}")
-    ResponseEntity<String>  getNextMonths(@PathVariable String month, @PathVariable int year){
+    @GetMapping("/nextMonth/{month}/{year}/{direction}")
+    ResponseEntity<String>  getNextMonths(@PathVariable String month, @PathVariable int year, @PathVariable int direction){
 
         Month m = Month.valueOf(month);
         LocalDateTime ld = monthUtils.getLocalDateTime(m, year, 1);
         LocalDateTime nextMonth = ld.plusMonths(1);
+         if(direction == -1){
+             nextMonth = ld.minusMonths(1);
+        }
 
         MonthListDTO mDTO = monthCreator.getMockTestListReservationsNext(nextMonth);
 

@@ -18,7 +18,7 @@ export class MonthService {
     return this.http.get<IMonth>(`${this.resourceUrl}/month`, { observe: 'response' });
   }
 
-  getNextMonth(currentMonth: string, currentYear: number): Observable<EntityResponseType> {
-    return this.http.get<IMonth>(`${this.resourceUrl}/nextMonth/${currentMonth}/${currentYear}`, { observe: 'response' });
+  getMonth(currentMonth: string, currentYear: number, direction: number): Observable<EntityResponseType> {
+    return this.http.get<IMonth>(`${this.resourceUrl}/nextMonth/${currentMonth}/${currentYear}/${direction}`, { observe: 'response' });
   }
 }

@@ -67,8 +67,10 @@
                 </tr>
                </tbody>
       </table>
-
-      <img [src]="imagePathNext" (click)="nextMonth()" style="width:4%;margin-top: 4%;margin-left: 5%">
       
-   
+        <img [src]="imagePathPrevious" *ngIf="counterIsBiggerThan0" (click)="nextMonth(-1)" style="width:3.5%;margin-top: 4%;margin-left: 5%">
+     
+       <img [src]="imagePathNext" (click)="nextMonth(1)" style="width:3.5%;margin-top: 4%;margin-left: 5%">
+      
+ 
 </div>

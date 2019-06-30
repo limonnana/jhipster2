@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Month, IMonth } from './month.model';
+import { IMonth } from './month.model';
 import { MonthService } from './month.service';
 import { filter, map } from 'rxjs/operators';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
-import { UnitOfCalendar } from './unit.of.calendar.model';
-import { KeyValue } from '@angular/common';
-import { MonthMapKey } from './month.map.key.model';
+import { JhiAlertService } from 'ng-jhipster';
 
 @Component({
   selector: 'jhi-month',
@@ -16,26 +13,16 @@ import { MonthMapKey } from './month.map.key.model';
 export class MonthComponent implements OnInit {
   month: IMonth;
   imagePathNext: string;
+  imagePathPrevious: string;
+  counterIsBiggerThan0 = false;
+  counter = 0;
 
   constructor(private monthService: MonthService, protected jhiAlertService: JhiAlertService) {}
 
   ngOnInit() {
     this.getCurrentMonth();
-    this.imagePathNext = '../../content/images/next1.png';
-  }
-
-  calculateCustomComparator(a: KeyValue<MonthMapKey, (UnitOfCalendar)[]>, b: KeyValue<MonthMapKey, (UnitOfCalendar)[]>): number {
-    const key1: number = +a.key.dayNumber;
-    const key2: number = +b.key.dayNumber;
-    const result = key1 > key2 ? 1 : key2 > key1 ? -1 : 0;
-    return result;
-  }
-
-  makeOrder(a: KeyValue<number, (any)[]>, b: KeyValue<number, (UnitOfCalendar)[]>): number {
-    const key1: number = +a.key;
-    const key2: number = +b.key;
-    const result = key1 > key2 ? 1 : key2 > key1 ? -1 : 0;
-    return result;
+    this.imagePathNext = '../../content/images/next4.png';
+    this.imagePathPrevious = '../../content/images/previous3.png';
   }
 
   getCurrentMonth() {
@@ -47,7 +34,6 @@ export class MonthComponent implements OnInit {
       )
       .subscribe(
         (res: IMonth) => {
-          // this.month = null;
           this.month = res;
           console.log('result: ' + this.month.name);
         },
@@ -55,24 +41,38 @@ export class MonthComponent implements OnInit {
       );
   }
 
-  nextMonth() {
-    this.monthService
-      .getNextMonth(this.month.name, this.month.year)
-      .pipe(
-        filter((res: HttpResponse<IMonth>) => res.ok),
-        map((res: HttpResponse<IMonth>) => res.body)
-      )
-      .subscribe(
-        (res: IMonth) => {
-          // this.month = null;
-          this.month = res;
-          console.log('result: ' + this.month.name);
-        },
-        (res: HttpErrorResponse) => this.onError(res.message)
-      );
+  nextMonth(direction: number) {
+    this.changeCounter(direction);
+    if (this.counterIsBiggerThan0) {
+      this.monthService
+        .getMonth(this.month.name, this.month.year, direction)
+        .pipe(
+          filter((res: HttpResponse<IMonth>) => res.ok),
+          map((res: HttpResponse<IMonth>) => res.body)
+        )
+        .subscribe(
+          (res: IMonth) => {
+            this.month = res;
+            console.log('result: ' + this.month.name);
+          },
+          (res: HttpErrorResponse) => this.onError(res.message)
+        );
+    } else {
+      this.getCurrentMonth();
+    }
   }
 
   protected onError(errorMessage: string) {
     this.jhiAlertService.error(errorMessage, null, null);
+  }
+
+  changeCounter(i: number): boolean {
+    this.counter = this.counter + i;
+    if (this.counter > 0) {
+      this.counterIsBiggerThan0 = true;
+    } else {
+      this.counterIsBiggerThan0 = false;
+    }
+    return this.counterIsBiggerThan0;
   }
 }
