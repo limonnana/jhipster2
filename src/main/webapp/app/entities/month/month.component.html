@@ -43,7 +43,7 @@
   <h3 id="page-heading">
       <span jhiTranslate="month.home.title">{{month.name}}</span> 
   </h3>
- 
+  <div *ngIf="month">
   <table style="border: 1px solid #d3d3d6;">
         <tbody>
                 <tr *ngFor="let x of month.m | mapCompositeKey" style="border: 1px solid #d3d3d6;">
@@ -57,8 +57,8 @@
                             <div class="rTableCell" *ngFor="let data of x.value">
                            {{data.userId}}
                             </div>
-                            <div class="rTableCell plus"> <a href="/{{x.key.dayNumber}}">+ </a></div>
-                            <div class="rTableCell minus"> - </div>
+                            <div class="rTableCell plus"> <a href="javascript:void(0);" (click)="addEntity(x.key.dayNumber)">+ </a></div>
+                            <div class="rTableCell minus"> <a href="javascript:void(0);" (click)="removeEntity(x.key.dayNumber)">- </a> </div>
                         </div>
                      </div>
                     
@@ -67,10 +67,10 @@
                 </tr>
                </tbody>
       </table>
-      
+   
         <img [src]="imagePathPrevious" *ngIf="counterIsBiggerThan0" (click)="nextMonth(-1)" style="width:3.5%;margin-top: 4%;margin-left: 5%">
      
        <img [src]="imagePathNext" (click)="nextMonth(1)" style="width:3.5%;margin-top: 4%;margin-left: 5%">
       
- 
+    </div>
 </div>

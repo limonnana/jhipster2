@@ -9,6 +9,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 @Component
@@ -108,7 +109,6 @@ public class MonthUtils {
         LocalDateTime firstDayNextMonth = getNextMonth();
         int month = firstDayNextMonth.getMonth().getValue();
         int nextMonth = month + 1;
-        // firstDayNextMonth.
         return firstDayNextMonth.plusMonths(howManyMonthForward);
     }
 
@@ -145,9 +145,33 @@ public class MonthUtils {
             mapKey.setDayNumber(keyMap);
             mapKey.setDayName(ld.getDayOfWeek().toString().toLowerCase());
             mDTO.getM().put(mapKey, ls.getList());
-            ld = ld.plusDays(1);
+          //  ld = ld.plusDays(1);
         };
 
         return mDTO;
+    }
+
+    public MonthList fromMonthDTO(MonthDTO monthDTO){
+
+       MonthList ml = new MonthList();
+
+        if(monthDTO.getId().intValue() == 0){
+            ml.setId(null);
+        }else{
+            ml.setId(monthDTO.getId());
+        }
+
+        ml.setName(Month.valueOf(monthDTO.getName()));
+        ml.setYear(monthDTO.getYear());
+        Map<Integer, ListWrapper> m = new TreeMap<>();
+        ListWrapper lw = new ListWrapper();
+        List<UnitOfCalendar> list = new ArrayList<>();
+        UnitOfCalendar u = new UnitOfCalendar();
+        u.setUserId(monthDTO.getUserLogin());
+        list.add(u);
+        lw.setList(list);
+        m.put(monthDTO.getDay(), lw);
+
+        return ml;
     }
 }

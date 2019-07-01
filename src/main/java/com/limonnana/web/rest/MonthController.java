@@ -4,16 +4,15 @@ package com.limonnana.web.rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.limonnana.domain.MonthArrayOrder;
+import com.limonnana.domain.MonthDTO;
 import com.limonnana.domain.MonthList;
 import com.limonnana.domain.MonthListDTO;
 import com.limonnana.monthFactory.MonthCreator;
 import com.limonnana.monthFactory.MonthUtils;
+import com.limonnana.repository.MonthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -24,6 +23,9 @@ import java.util.List;
 public class MonthController {
 
     @Autowired
+    private MonthRepository monthRepository;
+
+    @Autowired
    private MonthCreator monthCreator;
 
     @Autowired
@@ -31,10 +33,22 @@ public class MonthController {
 
     protected Gson gson;
 
+    @PostMapping("/addEntity")
+    ResponseEntity<String> saveEntity(@RequestBody MonthDTO monthDTO){
 
+        MonthList monthList = monthRepository.save(monthUtils.fromMonthDTO(monthDTO));
+
+        MonthListDTO mDTO = monthUtils.toMonthListDTO(monthList);
+
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+
+        String result = gson.toJson(mDTO);
+
+        return ResponseEntity.ok().body(result);
+    }
 
     @GetMapping("/month")
-    ResponseEntity<String>  getMonths(){
+    public ResponseEntity<String>  getMonths(){
 
         MonthListDTO mDTO = monthCreator.getMockTestListReservations();
 

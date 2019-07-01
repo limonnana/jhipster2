@@ -11,7 +11,7 @@ import { JhiAlertService } from 'ng-jhipster';
   styles: []
 })
 export class MonthComponent implements OnInit {
-  month: IMonth;
+  month?: IMonth;
   imagePathNext: string;
   imagePathPrevious: string;
   counterIsBiggerThan0 = false;
@@ -60,6 +60,30 @@ export class MonthComponent implements OnInit {
     } else {
       this.getCurrentMonth();
     }
+  }
+
+  addEntity(day: number) {
+    this.month.name;
+    this.month.year;
+    this.monthService
+      .addEntity(this.month.name, this.month.year, day)
+      .pipe(
+        filter((res: HttpResponse<IMonth>) => res.ok),
+        map((res: HttpResponse<IMonth>) => res.body)
+      )
+      .subscribe(
+        (res: IMonth) => {
+          this.month = res;
+          console.log('result: ' + this.month.name);
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  removeEntity(day: number) {
+    this.month.name;
+    this.month.year;
+    console.log('Remove Day is: ' + day);
   }
 
   protected onError(errorMessage: string) {
