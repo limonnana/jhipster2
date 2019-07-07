@@ -26,12 +26,12 @@ export class MonthService {
     return this.http.get<IMonth>(`${this.resourceUrl}/nextMonth/${currentMonth}/${currentYear}/${direction}`, { observe: 'response' });
   }
 
-  addEntity(currentMonth: string, currentYear: number, day: number) {
+  addEntity(currentYear: number, currentMonth: string, day: number, from: number, untill: number) {
     this.accountService.identity().then(account => {
       this.login = account.login;
-      console.log('userName: ' + account.login);
+      console.log('userName at service: ' + account.login);
     });
-    this.mDTO = new MonthDTO(0, currentMonth, currentYear, day, this.login);
+    this.mDTO = new MonthDTO(0, currentYear, currentMonth, day, this.login, from, untill);
     return this.http.post<IMonth>(`${this.resourceUrl}/addEntity`, this.mDTO, { observe: 'response' });
   }
 }

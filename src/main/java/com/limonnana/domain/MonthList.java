@@ -5,33 +5,27 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.time.Month;
 
-@Entity
-@Table(name = "month_list")
+
 public class MonthList {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+
     private Long id;
 
-    @Column(name = "name", columnDefinition = "smallint")
-    @Enumerated
     private Month name;
     private int year;
     private int from;
     private int untill;
 
-    @ElementCollection
     private Map<Integer, ListWrapper> m = new TreeMap<>();
 
     public MonthList(){}
 
-    public MonthList(int from, int untill, int year, Month name){
+    public MonthList(int year, Month name, int from, int untill){
 
+        this.year = year;
         this.name = name;
         this.from = from;
         this.untill = untill;
-        this.year = year;
     }
 
     public Month getName() {

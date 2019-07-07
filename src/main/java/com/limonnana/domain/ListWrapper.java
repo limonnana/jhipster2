@@ -11,21 +11,10 @@ import java.util.List;
 public class ListWrapper {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+    private int id;
 
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UnitOfCalendar> list;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 
     public List<UnitOfCalendar> getList() {
         return list;
@@ -33,5 +22,13 @@ public class ListWrapper {
 
     public void setList(List<UnitOfCalendar> list) {
         this.list = list;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

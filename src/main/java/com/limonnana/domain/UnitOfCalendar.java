@@ -1,6 +1,7 @@
 package com.limonnana.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class UnitOfCalendar {
@@ -12,6 +13,7 @@ public class UnitOfCalendar {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @NotNull
     private String userId;
 
     public String getUserId() {

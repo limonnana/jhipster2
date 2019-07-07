@@ -1,52 +1,71 @@
 package com.limonnana.monthFactory;
 
 import com.limonnana.domain.*;
+import com.limonnana.repository.ListWrapperRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 
 @Component
 public class MonthUtils {
 
-    /*
-    EntityOnCalendar saveEntity(int from, int untill, int year, int eFrom, int eUntill, Month name, long userId){
 
-        //get calendar from database, (if == null)
-        MonthList monthInstance = new MonthList(from, untill, year, name);
-        monthInstance.setFrom(eFrom);
-        createEmptyList(monthInstance);
-        // get User from database ? Shoudn't be necesary check dont genarate or update with null values
-        User u = new User();
-        u.setId(userId);
+    @Autowired
+    ListWrapperRepository listWrapperRepository;
 
-        Reservation reservation = new Reservation();
-        reservation.setUser(u);
 
-        LocalDate ldFrom = LocalDate.of(year, name, eFrom);
-        LocalDate ldUntill = LocalDate.of(year, name, eUntill);
-        reservation.from(ldFrom);
-        reservation.untill(ldUntill);
 
-        EntityOnCalendar e = new EntityOnCalendar();
-        e.setReservation(reservation);
-
-        for(int i=eFrom;i<eUntill;i++) {
-            monthInstance.getM().get(i).getList().add(e);
+    private int createIdListWraper(int year, int month, int day){
+        StringBuilder sb = new StringBuilder();
+        sb.append(year);
+        if(month<10){
+            sb.append("0");
         }
-
-        // call service and save all ( reservation, monthList SYNCRONIZE AVOID TWO CALENDARS SAME MONTH YEAR
-
-        return e;
+        sb.append(month);
+        if(day<10){
+            sb.append("0");
+        }
+        sb.append(day);
+        String idListWrapperS = sb.toString();
+        int idListWrapper = Integer.valueOf(idListWrapperS);
+        return idListWrapper;
     }
 
-     */
+    ListWrapper getListFromListWrapper( int idListWrapper){
+        ListWrapper listWrapper = null;
+        List<UnitOfCalendar> list = null;
+        Optional<ListWrapper> listWrapperOptional = listWrapperRepository.findById(idListWrapper);
+        if(!listWrapperOptional.isPresent()) {
+            listWrapper = new ListWrapper();
+            listWrapper.setId(idListWrapper);
+            list = new ArrayList<>();
+            listWrapper.setList(list);
+        }else{
+            listWrapper = listWrapperRepository.findById(idListWrapper).get();
+        }
+        return listWrapper;
+    }
+
+    public void saveEntity(MonthDTO monthDTO){
+        ListWrapper listWrapper = null;
+        int day = monthDTO.getDay();
+        Month m = Month.valueOf(monthDTO.getName().toUpperCase());
+        int month = m.getValue();
+        int year = monthDTO.getYear();
+        int idListWrapper = createIdListWraper(year, month, day);
+        listWrapper = getListFromListWrapper(idListWrapper);
+        List list = listWrapper.getList();
+            UnitOfCalendar uc = new UnitOfCalendar();
+            uc.setUserId(monthDTO.getUserLogin());
+            list.add(uc);
+            listWrapper.setList(list);
+        listWrapperRepository.save(listWrapper);
+    }
 
     public MonthList getCurrentMonth() {
         MonthList month = new MonthList();
@@ -77,6 +96,15 @@ public class MonthUtils {
         return monthList;
     }
 
+    public void getTrueList(MonthList monthList) {
+        for (int i = monthList.getFrom(); i <= monthList.getUntill(); i++) {
+            List<UnitOfCalendar> unitsList = new ArrayList<>();
+            int idListWrapper = createIdListWraper(monthList.getYear(), monthList.getName().getValue(), i);
+            ListWrapper lw = getListFromListWrapper(idListWrapper);
+            monthList.getM().put(i, lw);
+        }
+    }
+/*
     public void createEmptyList(MonthList monthList) {
         for (int i = monthList.getFrom(); i <= monthList.getUntill(); i++) {
             List<UnitOfCalendar> unitsList = new ArrayList<>();
@@ -85,7 +113,7 @@ public class MonthUtils {
             monthList.getM().put(i, lw);
         }
     }
-
+*/
     public MonthArrayOrder getArrayOrderMonth(LocalDateTime day, int amountMaximunUnitsPerDay){
 
         MonthArrayOrder monthArrayOrder = new MonthArrayOrder();
@@ -145,7 +173,7 @@ public class MonthUtils {
             mapKey.setDayNumber(keyMap);
             mapKey.setDayName(ld.getDayOfWeek().toString().toLowerCase());
             mDTO.getM().put(mapKey, ls.getList());
-          //  ld = ld.plusDays(1);
+            ld = ld.plusDays(1);
         };
 
         return mDTO;
@@ -163,6 +191,8 @@ public class MonthUtils {
 
         ml.setName(Month.valueOf(monthDTO.getName()));
         ml.setYear(monthDTO.getYear());
+        ml.setFrom(monthDTO.getFrom());
+        ml.setUntill(monthDTO.getUntill());
         Map<Integer, ListWrapper> m = new TreeMap<>();
         ListWrapper lw = new ListWrapper();
         List<UnitOfCalendar> list = new ArrayList<>();

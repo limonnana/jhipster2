@@ -71,7 +71,7 @@ public class MonthCreator {
 
         MonthList monthList = monthUtils.getMonthList(day);
         monthList.setId(1L);
-        monthUtils.createEmptyList(monthList);
+        monthUtils.getTrueList(monthList);
         MonthListDTO mDTO = monthUtils.toMonthListDTO(monthList);
         Map<MonthListDTOMapKey, List<UnitOfCalendar>> m = mDTO.getM();
 
@@ -102,7 +102,7 @@ public class MonthCreator {
 
         MonthList monthList = monthUtils.getCurrentMonth();
         monthList.setId(1L);
-        monthUtils.createEmptyList(monthList);
+        monthUtils.getTrueList(monthList);
         MonthListDTO mDTO = monthUtils.toMonthListDTO(monthList);
         Map m =  mDTO.getM();
 

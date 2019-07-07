@@ -9,7 +9,9 @@ public class MonthDTO {
         public name?: string,
         public year?: number,
         public day?: number,
-        public userLogin?: string
+        public userLogin?: string,
+        public from?: number,
+        public untill?: number
      */
 
     private Long id;
@@ -17,6 +19,8 @@ public class MonthDTO {
     private int year;
     private int day;
     private String userLogin;
+    private int from;
+    private int untill;
 
     public Long getId() {
         return id;
@@ -56,5 +60,21 @@ public class MonthDTO {
 
     public void setUserLogin(String userLogin) {
         this.userLogin = userLogin;
+    }
+
+    public int getFrom() {
+        return from;
+    }
+
+    public void setFrom(int from) {
+        this.from = from;
+    }
+
+    public int getUntill() {
+        return untill;
+    }
+
+    public void setUntill(int untill) {
+        this.untill = untill;
     }
 }

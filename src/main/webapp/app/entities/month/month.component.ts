@@ -4,6 +4,7 @@ import { MonthService } from './month.service';
 import { filter, map } from 'rxjs/operators';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { JhiAlertService } from 'ng-jhipster';
+import { AccountService } from 'app/core';
 
 @Component({
   selector: 'jhi-month',
@@ -16,8 +17,9 @@ export class MonthComponent implements OnInit {
   imagePathPrevious: string;
   counterIsBiggerThan0 = false;
   counter = 0;
+  login: string;
 
-  constructor(private monthService: MonthService, protected jhiAlertService: JhiAlertService) {}
+  constructor(private monthService: MonthService, protected jhiAlertService: JhiAlertService, private accountService: AccountService) {}
 
   ngOnInit() {
     this.getCurrentMonth();
@@ -35,7 +37,6 @@ export class MonthComponent implements OnInit {
       .subscribe(
         (res: IMonth) => {
           this.month = res;
-          console.log('result: ' + this.month.name);
         },
         (res: HttpErrorResponse) => this.onError(res.message)
       );
@@ -63,10 +64,13 @@ export class MonthComponent implements OnInit {
   }
 
   addEntity(day: number) {
-    this.month.name;
-    this.month.year;
+    this.accountService.identity().then(account => {
+      this.login = account.login;
+      console.log('userName: ' + account.login);
+    });
+
     this.monthService
-      .addEntity(this.month.name, this.month.year, day)
+      .addEntity(this.month.year, this.month.name, day, this.month.from, this.month.untill)
       .pipe(
         filter((res: HttpResponse<IMonth>) => res.ok),
         map((res: HttpResponse<IMonth>) => res.body)

@@ -22,8 +22,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class MonthController {
 
-    @Autowired
-    private MonthRepository monthRepository;
+   // @Autowired
+  //  private MonthRepository monthRepository;
 
     @Autowired
    private MonthCreator monthCreator;
@@ -33,12 +33,23 @@ public class MonthController {
 
     protected Gson gson;
 
-    @PostMapping("/addEntity")
-    ResponseEntity<String> saveEntity(@RequestBody MonthDTO monthDTO){
+    /*
+     @RequestMapping(value="/addEntity/{month}/{year}/{day}/{from}/{untill}" , method = RequestMethod.GET)
+    ResponseEntity<String> saveEntity(@PathVariable("month") String month, @PathVariable("year") int year, @PathVariable("day") int day, @PathVariable("from") int from, @PathVariable("untill") int untill){
+        System.out.println("addEntity");
+        MonthDTO monthDTO = new MonthDTO();
+        monthDTO.setUserLogin("user8");
+        monthDTO.setName(month);
+        monthDTO.setYear(year);
+        monthDTO.setDay(day);
+        monthDTO.setFrom(from);
+        monthDTO.setUntill(untill);
+        monthUtils.saveEntity(monthDTO);
 
-        MonthList monthList = monthRepository.save(monthUtils.fromMonthDTO(monthDTO));
+        Month m = Month.valueOf(monthDTO.getName().toUpperCase());
+        LocalDateTime ld = monthUtils.getLocalDateTime(m, monthDTO.getYear(), 1);
 
-        MonthListDTO mDTO = monthUtils.toMonthListDTO(monthList);
+        MonthListDTO mDTO = monthCreator.getMockTestListReservationsNext(ld);
 
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
 
@@ -46,6 +57,29 @@ public class MonthController {
 
         return ResponseEntity.ok().body(result);
     }
+
+  */
+
+
+    @PostMapping("/addEntity")
+    ResponseEntity<String> saveEntity(@RequestBody MonthDTO monthDTO){
+
+        monthUtils.saveEntity(monthDTO);
+
+        MonthList monthList = monthUtils.fromMonthDTO(monthDTO);
+
+        Month m = Month.valueOf(monthDTO.getName().toUpperCase());
+        LocalDateTime ld = monthUtils.getLocalDateTime(m, monthDTO.getYear(), 1);
+
+        MonthListDTO mDTO = monthCreator.getMockTestListReservationsNext(ld);
+
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization().create();
+
+        String result = gson.toJson(mDTO);
+
+        return ResponseEntity.ok().body(result);
+    }
+
 
     @GetMapping("/month")
     public ResponseEntity<String>  getMonths(){
