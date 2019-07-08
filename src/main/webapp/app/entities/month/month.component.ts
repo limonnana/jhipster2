@@ -5,6 +5,8 @@ import { filter, map } from 'rxjs/operators';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { JhiAlertService } from 'ng-jhipster';
 import { AccountService } from 'app/core';
+import { Router } from '@angular/router';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'jhi-month',
@@ -18,13 +20,29 @@ export class MonthComponent implements OnInit {
   counterIsBiggerThan0 = false;
   counter = 0;
   login: string;
+  modalRef: NgbModalRef;
 
-  constructor(private monthService: MonthService, protected jhiAlertService: JhiAlertService, private accountService: AccountService) {}
+  constructor(
+    private router: Router,
+    private monthService: MonthService,
+    protected jhiAlertService: JhiAlertService,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit() {
     this.getCurrentMonth();
     this.imagePathNext = '../../content/images/next4.png';
     this.imagePathPrevious = '../../content/images/previous3.png';
+    this.accountService.identity().then(account => {
+      if (account) {
+        this.login = account.login;
+      }
+      /*
+     else {
+       this.router.navigate(['register']);
+     }
+      */
+    });
   }
 
   getCurrentMonth() {
@@ -54,7 +72,6 @@ export class MonthComponent implements OnInit {
         .subscribe(
           (res: IMonth) => {
             this.month = res;
-            console.log('result: ' + this.month.name);
           },
           (res: HttpErrorResponse) => this.onError(res.message)
         );
@@ -64,13 +81,11 @@ export class MonthComponent implements OnInit {
   }
 
   addEntity(day: number) {
-    this.accountService.identity().then(account => {
-      this.login = account.login;
-      console.log('userName: ' + account.login);
-    });
-
+    if (!this.login) {
+      this.router.navigate(['register']);
+    }
     this.monthService
-      .addEntity(this.month.year, this.month.name, day, this.month.from, this.month.untill)
+      .addEntity(this.month.year, this.month.name, day, this.month.from, this.month.untill, this.login)
       .pipe(
         filter((res: HttpResponse<IMonth>) => res.ok),
         map((res: HttpResponse<IMonth>) => res.body)
@@ -78,16 +93,24 @@ export class MonthComponent implements OnInit {
       .subscribe(
         (res: IMonth) => {
           this.month = res;
-          console.log('result: ' + this.month.name);
         },
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
 
   removeEntity(day: number) {
-    this.month.name;
-    this.month.year;
-    console.log('Remove Day is: ' + day);
+    this.monthService
+      .removeEntity(this.month.year, this.month.name, day, this.month.from, this.month.untill, this.login)
+      .pipe(
+        filter((res: HttpResponse<IMonth>) => res.ok),
+        map((res: HttpResponse<IMonth>) => res.body)
+      )
+      .subscribe(
+        (res: IMonth) => {
+          this.month = res;
+        },
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
   }
 
   protected onError(errorMessage: string) {

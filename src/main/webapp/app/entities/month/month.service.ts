@@ -13,10 +13,9 @@ type EntityResponseType = HttpResponse<IMonth>;
 })
 export class MonthService {
   public resourceUrl = SERVER_API_URL + 'api';
-  login: string;
   mDTO: MonthDTO;
 
-  constructor(protected http: HttpClient, private accountService: AccountService) {}
+  constructor(protected http: HttpClient) {}
 
   getCurrentMonth(): Observable<EntityResponseType> {
     return this.http.get<IMonth>(`${this.resourceUrl}/month`, { observe: 'response' });
@@ -26,12 +25,13 @@ export class MonthService {
     return this.http.get<IMonth>(`${this.resourceUrl}/nextMonth/${currentMonth}/${currentYear}/${direction}`, { observe: 'response' });
   }
 
-  addEntity(currentYear: number, currentMonth: string, day: number, from: number, untill: number) {
-    this.accountService.identity().then(account => {
-      this.login = account.login;
-      console.log('userName at service: ' + account.login);
-    });
-    this.mDTO = new MonthDTO(0, currentYear, currentMonth, day, this.login, from, untill);
+  addEntity(currentYear: number, currentMonth: string, day: number, from: number, untill: number, login: string) {
+    this.mDTO = new MonthDTO(0, currentYear, currentMonth, day, login, from, untill);
     return this.http.post<IMonth>(`${this.resourceUrl}/addEntity`, this.mDTO, { observe: 'response' });
+  }
+
+  removeEntity(currentYear: number, currentMonth: string, day: number, from: number, untill: number, login: string) {
+    this.mDTO = new MonthDTO(0, currentYear, currentMonth, day, login, from, untill);
+    return this.http.post<IMonth>(`${this.resourceUrl}/removeEntity`, this.mDTO, { observe: 'response' });
   }
 }

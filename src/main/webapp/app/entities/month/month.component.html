@@ -38,16 +38,14 @@
     display: table-row-group;
 }
 </style>
-<div>
-       
-       {{month.year}} 
+<div *ngIf="month">
+        {{month.year}} 
   <h4 id="page-heading">
         <img [src]="imagePathPrevious" *ngIf="counterIsBiggerThan0" (click)="nextMonth(-1)" style="width:3.5%;margin-top: 0%;margin-right:1%;margin-left: 0%">
       <span jhiTranslate="month.home.title">{{month.name}}</span> 
       <img [src]="imagePathNext" (click)="nextMonth(1)" style="width:3.5%;margin-top: 0%;margin-left: 1%">
   </h4>
   
-  <div *ngIf="month">
   <table style="border: 1px solid #d3d3d6;">
         <tbody>
                 <tr *ngFor="let x of month.m | mapCompositeKey" style="border: 1px solid #d3d3d6;">
@@ -76,5 +74,4 @@
      
        <img [src]="imagePathNext" (click)="nextMonth(1)" style="width:3.5%;margin-top: 4%;margin-left: 5%">
       
-    </div>
 </div>

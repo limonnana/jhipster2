@@ -67,6 +67,26 @@ public class MonthUtils {
         listWrapperRepository.save(listWrapper);
     }
 
+    public void removeEntity(MonthDTO monthDTO){
+        ListWrapper listWrapper = null;
+        int day = monthDTO.getDay();
+        Month m = Month.valueOf(monthDTO.getName().toUpperCase());
+        int month = m.getValue();
+        int year = monthDTO.getYear();
+        int idListWrapper = createIdListWraper(year, month, day);
+        listWrapper = getListFromListWrapper(idListWrapper);
+        List<UnitOfCalendar> list = listWrapper.getList();
+        Iterator<UnitOfCalendar> iter = list.iterator();
+        while (iter.hasNext()) {
+            UnitOfCalendar u = iter.next();
+            if (u.getUserId().equals(monthDTO.getUserLogin())) {
+                iter.remove();
+                break;
+            }
+        }
+        listWrapperRepository.save(listWrapper);
+    }
+
     public MonthList getCurrentMonth() {
         MonthList month = new MonthList();
         LocalDateTime now = LocalDateTime.now();
@@ -144,6 +164,12 @@ public class MonthUtils {
         LocalDateTime ld = LocalDateTime.of(year,m, day, 1, 1);
         return ld;
     }
+
+    public boolean isThisMonth(Month m){
+        LocalDateTime now = LocalDateTime.now();
+        return now.getMonth().getValue() == m.getValue();
+    }
+
 
     public LocalDateTime getNextMonth(){
         LocalDateTime now = LocalDateTime.now();
