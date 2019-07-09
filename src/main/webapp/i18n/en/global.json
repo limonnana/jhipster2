@@ -35,8 +35,8 @@
       "language": "Language"
     },
     "form": {
-      "username.label": "Username",
-      "username.placeholder": "Your username",
+      "username.label": "Phone",
+      "username.placeholder": "Your phone",
       "currentpassword.label": "Current password",
       "currentpassword.placeholder": "Current password",
       "newpassword.label": "New password",
@@ -49,9 +49,9 @@
     "messages": {
       "info": {
         "authenticated": {
-          "prefix": "If you want to ",
+          "prefix": "Please ",
           "link": "sign in",
-          "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+          "suffix": " if you have an account or fill up the form to register a new one."
         },
         "register": {
           "noaccount": "You don't have an account yet?",
